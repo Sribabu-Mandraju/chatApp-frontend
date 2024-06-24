@@ -6,9 +6,17 @@ import { FaXTwitter } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
 import Loading from "./Loading";
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser, selectIsAuthenticated, selectUser } from '../redux/authSlice';
+
 
 const SigninComponent = () => {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const isAuthenticated = useSelector(selectIsAuthenticated);
+    const user = useSelector(selectUser);
+
+
     const [data, setData] = useState({
         email: "",
         password: ""
@@ -28,31 +36,39 @@ const SigninComponent = () => {
         }));
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            setLoading(true);
-            const response = await axios.post("http://localhost:3000/signin", data);
-            if (response.status === 200) {
-                alert("Success!");
-                setData({
-                    email: '',
-                    password: ''
-                });
-                navigate('/home'); // Redirect to login page after successful signup
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            setError(error.response?.data?.message || 'An error occurred');
-        } finally {
-            setLoading(false);
-        }
-    };
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     try {
+    //         setLoading(true);
+    //         const response = await axios.post("http://localhost:3000/signin", data);
+    //         if (response.status === 200) {
+    //             setData({
+    //                 email: '',
+    //                 password: ''
+    //             });
+    //             navigate('/home'); // Redirect to login page after successful signup
+    //         }
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //         setError(error.response?.data?.message || 'An error occurred');
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        dispatch(loginUser(data));
+      };
+
+      if (isAuthenticated) {
+        navigate('/');
+      }
     return (
         <div className="w-full flex items-center justify-center min-h-screen bg-zinc-50">
-            <form onSubmit={handleSubmit} className="w-[97%] max-w-[400px] mx-auto flex flex-col shadow rounded-[5px] bg-white">
-                <div className="text-center font-bold text-2xl mt-5 text-violet-700">Sign Up</div>
+            <form onSubmit={handleSubmit} className="w-[97%] max-w-[400px] z-[2] mx-auto flex flex-col shadow rounded-[5px] bg-white">
+                <div className="text-center font-bold text-2xl mt-5 text-violet-700">Sign In</div>
                 <div className="text-center italic text-zinc-400 text-[12px] ">sign in to explore realms of this application</div>
                 <div className="flex items-center relative mt-2">
                     <input

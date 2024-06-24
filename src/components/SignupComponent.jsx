@@ -36,7 +36,6 @@ const SignupComponent = () => {
             setLoading(true);
             const response = await axios.post("http://localhost:3000/signup", data);
             if (response.status === 200) {
-                alert("Success!");
                 setData({
                     name: '',
                     email: '',
