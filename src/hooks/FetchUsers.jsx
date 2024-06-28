@@ -1,32 +1,40 @@
-import React ,{useState,useEffect} from 'react'
-import { useSelector } from 'react-redux';
-import { selectUser } from '../redux/authSlice';
-import axios from 'axios'
+// useFetchConversations.js
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
-const FetchUsers = () => {
-  const user = useSelector(selectUser)
-  console.log(user)
-  const [loading,setLoading] = useState(false);
-  const [conversations,setConversations] = useState([])
+const useFetchConversations = () => {
+  const [loading, setLoading] = useState(false);
+  const [conversations, setConversations] = useState([]);
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    const data = localStorage.getItem("userData");
+    if (data) {
+      const userData = JSON.parse(data);
+      setUser(userData);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchConversations = async () => {
-        setLoading(true)
-        try {
-            const res =await axios.get(`http://localhost:3000/msg/getChats/${user._id}`)
-            setConversations(res.data)
-            console.log(conversations)
-        } catch (error) {
-            console.log(error.message)
-        }
-        finally{
-          setLoading(false)
-        }
-    }
-    fetchConversations()
-  },[])
+      if (!user._id) return;
 
-  return (loading,conversations)
-}
+      setLoading(true);
 
-export default FetchUsers
+      try {
+        const res = await axios.get(`http://localhost:3000/msg/getChats/${user._id}`);
+        setConversations(res.data);
+      } catch (error) {
+        console.log(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchConversations();
+  }, [user]);
+
+  return { loading, conversations, user };
+};
+
+export default useFetchConversations;

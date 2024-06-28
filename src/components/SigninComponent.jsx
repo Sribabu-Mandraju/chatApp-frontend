@@ -6,27 +6,21 @@ import { FaXTwitter } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
 import Loading from "./Loading";
 import axios from 'axios';
+import { signInStart, signInSuccess, signInFailure } from '../store/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser, selectIsAuthenticated, selectUser } from '../redux/authSlice';
+
 
 
 const SigninComponent = () => {
-    const dispatch = useDispatch();
     const navigate = useNavigate();
-    const isAuthenticated = useSelector(selectIsAuthenticated);
-    const user = useSelector(selectUser);
-
+    const dispatch = useDispatch();
 
     const [data, setData] = useState({
         email: "",
         password: ""
     });
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-
-    if (loading) {
-        return <Loading />;
-    }
+    const [error, setError] =useState(null);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -36,40 +30,40 @@ const SigninComponent = () => {
         }));
     };
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     try {
-    //         setLoading(true);
-    //         const response = await axios.post("http://localhost:3000/signin", data);
-    //         if (response.status === 200) {
-    //             setData({
-    //                 email: '',
-    //                 password: ''
-    //             });
-    //             navigate('/home'); // Redirect to login page after successful signup
-    //         }
-    //     } catch (error) {
-    //         console.error('Error:', error);
-    //         setError(error.response?.data?.message || 'An error occurred');
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        dispatch(loginUser(data));
-      };
+        dispatch(signInStart());
+        try {
+            setLoading(true);
+            const response = await axios.post("http://localhost:3000/signin", data);
+            
+            if (response.status === 200) {
+                const result = JSON.stringify(response.data);
+                localStorage.setItem("userData", result);
+                dispatch(signInSuccess(response.data));
+                setData({
+                    email: '',
+                    password: ''
+                });
+                navigate('/home');
+            }
+        } catch (error) {
+            console.error('Error:', error.message);
+            setError(error.response?.data?.message || 'An error occurred');
+            dispatch(signInFailure(error.response?.data || 'An error occurred'));
+        } finally {
+            setLoading(false);
+        }
+    };
 
-      if (isAuthenticated) {
-        navigate('/');
-      }
+    if (loading) {
+        return <Loading />;
+    }
     return (
         <div className="w-full flex items-center justify-center min-h-screen bg-zinc-50">
             <form onSubmit={handleSubmit} className="w-[97%] max-w-[400px] z-[2] mx-auto flex flex-col shadow rounded-[5px] bg-white">
                 <div className="text-center font-bold text-2xl mt-5 text-violet-700">Sign In</div>
-                <div className="text-center italic text-zinc-400 text-[12px] ">sign in to explore realms of this application</div>
+                <div className="text-center italic text-zinc-400 text-[12px]">Sign in to explore realms of this application</div>
                 <div className="flex items-center relative mt-2">
                     <input
                         type="email"
@@ -93,9 +87,8 @@ const SigninComponent = () => {
                     <RiLockPasswordLine className="absolute left-[20px] z-[1]" />
                 </div>
                 <div className="flex my-4 w-[95%] mx-auto">
-                    <input type="checkbox" className="" required />
+                    <input type="checkbox" required />
                     <p className="text-left ps-2 text-sm">
-                        {" "}
                         <span className="text-black">Terms and Services</span> and{" "}
                         <span className="text-black">Privacy Policy</span>
                     </p>
