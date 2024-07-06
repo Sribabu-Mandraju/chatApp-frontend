@@ -45,7 +45,7 @@ const SigninComponent = () => {
                     email: '',
                     password: ''
                 });
-                navigate('/home');
+                navigate('/');
             }
         } catch (error) {
             console.error('Error:', error.message);

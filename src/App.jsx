@@ -6,7 +6,13 @@ import Home from './pages/Home'
 import Register from './pages/auth/Register'
 import NotFound from './components/NotFound';
 import About from './pages/About';
-
+import PrivateRoutes from './utils/PrivateRoutes';
+import MainPage from './pages/MainPage';
+import Posts from './pages/Posts';
+import Profile from './pages/Profile';
+import UnreadMessages from './pages/UnreadMessages';
+import Search from './pages/Search';
+import Chat from './components/share/Chat';
 
 
 
@@ -17,13 +23,21 @@ const  App = () => {
 
   return (
    <>
-      <Routes>
-        <Route element={<Login />} path="/" exact />
-        <Route element={<About />} path="/about" />
-        <Route element={<Home/>} path="/home"/>
-        <Route element={<Register/>} path="/register"/>
-        <Route path="*" element={<NotFound />} /> 
-      </Routes>
+      <Home >
+        <Routes>
+              <Route element={<PrivateRoutes />}>
+                  <Route element={<MainPage/>} path="/" exact/>
+                  <Route element={<Posts />} path="/posts" />
+                  <Route element={<Profile />} path="/profile" />
+                  <Route element={<Search />} path="/search" />
+                  <Route element={<UnreadMessages />} path="/unread-messages" />
+                  <Route element={<Chat />} path="/chat/:id" />
+              </Route>
+              <Route element={<Login/>} path="/login"/>
+              <Route element={<Register/>} path="/  "/>
+              <Route path="*" element={<NotFound />} /> 
+        </Routes>
+      </Home>
    </>
   )
 }

@@ -48,3 +48,10 @@
   50% { transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg); }
   100% { transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg); }
 }
+
+*{
+  font-family: "Orbitron", sans-serif;
+  font-optical-sizing: auto;
+  /* font-weight: <weight>; */
+  font-style: normal;
+}
