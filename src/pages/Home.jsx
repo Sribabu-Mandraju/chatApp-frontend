@@ -20,13 +20,14 @@ const Home = ({children}) => {
   const getPage = pathName.split("/")
   const getExactPage = getPage[getPage.length-1]
   console.log(getPage[getPage.length-1])
+
   // console.log(`${getExactPage === "" || "posts" || "search" || "porfile" || "unread-messages" ?"hidden":""} `})
 
  
   return (
     <>
       <section className={`w-full  relative max-h-screen min-h-screen sm:hidden `}>
-          <div className={`bg-white w-full h-[40px] flex items-center justify-around sticky top-0 shadow `}>
+          <div className={`bg-white w-full h-[40px]  items-center justify-around sticky top-0 shadow ${getPage[getPage.length-2] == "chat" ? "hidden":"flex"} `}>
               <div className={`flex flex-col justify-center items-center rounded-md  px-2 ${getExactPage==""?" text-[#7a0099] font-bold":""}  p-1`} onClick={()=>{
                 setTab("Home")
                 navigate("/")
@@ -63,7 +64,7 @@ const Home = ({children}) => {
                 <div className="font-semibold text-[10px]">Profile</div>
               </div>  
           </div>
-          <div className="w-full h-[calc(100vh-40px)] overflow-y-scroll">
+          <div className={`w-full h-[calc(100vh-40px)] overflow-y-scroll  ${getPage[getPage.length-2] == "chat" ? "h-screen":"h-[calc(100vh-40px)]ex"}`}>
             {children}
           </div>
       </section>
