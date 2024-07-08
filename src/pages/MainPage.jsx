@@ -2,7 +2,6 @@ import React,{useState,useEffect} from 'react'
 import useFetchConversations from '../hooks/FetchUsers';
 import Loading from '../components/Loading';
 import ChatInfo from '../components/share/ChatInfo';
-import { fetchConversations } from '../store/chatsSlice';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 

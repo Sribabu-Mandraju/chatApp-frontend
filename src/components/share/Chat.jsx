@@ -2,11 +2,15 @@ import React,{useState,useEffect} from 'react'
 import { IoMdArrowBack } from "react-icons/io";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { MdDelete } from 'react-icons/md';
+import { FaRegSmile } from "react-icons/fa";
 import { useSelector } from 'react-redux';
+import { LuSend } from "react-icons/lu";
+
 import useFetchMessages from '../../hooks/FetchChat';
 import Loading from '../Loading';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios'
 
 
 
@@ -14,16 +18,36 @@ import { useNavigate } from 'react-router-dom';
 const Chat = () => {
   const navigate = useNavigate()
   const {id} = useParams()
-  console.log("id" ,id)
-  const {loading,messages,chatDetails,user} = useFetchMessages(id)
-  console.log("messages",messages)
-  
-  console.log("chat details",chatDetails)
+  const {loading,messages,user} = useFetchMessages(id)
+  const [chatDetails,setChatDetails] = useState({})
+  const [fetchLoading,setFetchLoading] = useState(false)
+
+  console.log(messages)
+
+  console.log(messages)
+
   const userData = useSelector((state) => state.auth.user)
+  console.log(userData._id)
   const pathName = window.location.pathname;
   const getPage = pathName.split("/")
   const getExactPage = getPage[getPage.length-2]
-  if(loading){
+  useEffect(() => {
+    const fetchData = async(req,res) => {
+      setFetchLoading(true)
+      try{
+        const response = await axios.get(`http://localhost:3000/user/${id}`)
+        setChatDetails(response.data)
+        setFetchLoading(false)
+      }
+      catch(err){
+        console.log(err)
+        setFetchLoading(false)
+      }
+    }
+    fetchData()
+  },[id])
+  console.log(chatDetails)
+  if(loading || fetchLoading){
     return (
       <Loading />
     )
@@ -40,10 +64,10 @@ const Chat = () => {
             <div className="flex flex-col ms-2">
               <div className="flex items-center">
                 <div className="w-[25px] h-[25px] flex rounded-full bg-black text-white font-bold items-center justify-center">
-                  <span>S</span>
+                <span className="uppercase">{chatDetails && chatDetails.name ? chatDetails.name[0] : 'U'}</span>
                 </div>
                 <div className="flex flex-col">
-                  <div className="font-bold ps-2">Sribabu</div>
+                  <div className="font-bold ps-2">{chatDetails && chatDetails.name ? chatDetails.name : 'In valid'}</div>
                 </div>
               </div>
             </div>
@@ -60,6 +84,22 @@ const Chat = () => {
             </div>
           
         </div>
+        <div className="w-full flex items-center mt-1">
+          <FaRegSmile className="text-2xl ms-2" />
+          <input type="text" className="bg-zinc-200 w-70 max-w-[520px] outline-none ps-2 rounded-lg h-[50px] border-[4px]  ms-2 " placeholder='message....' />
+          <button className="w-[60px] h-[50px] flex justify-start items-center rounded-r-[50%] bg-black text-white">
+            <LuSend className="text-2xl ms-3" />
+          </button>
+        </div>
+        {
+          messages.map((data) => (
+            <div className={`w-full flex ${data.receiverId === userData._id ?"justify-end":"justify-start"} relative `}>
+              <div className="message w-80 m-2 max-w-[200px] rounded-tr-md min-h-[40px] bg-black text-white text-[12px] p-2 rounded-bl-[10px]">{data.message}</div>
+              <div className="absolute bottom-[-30%] text-[12px]  p-2 ">10:44 pm</div>
+            </div>
+          ))
+        }
+       
     </>
   )
 }

@@ -1,15 +1,12 @@
 // src/features/dataSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
 
-
+// Async thunk to fetch conversations
 export const fetchConversations = createAsyncThunk(
   'data/fetchConversations',
-  async () => {
-    const user = useSelector((state)=>state.auth.user)
-    console.log("user :",user)
-    const response = await axios.get(`http://localhost:3000/msg/getChats/${user._id}`); // Replace with your API endpoint
+  async ({ userId, conversationId }) => {
+    const response = await axios.get(`http://localhost:3000/msg/getMessages/${userId}/${conversationId}`);
     return response.data;
   }
 );

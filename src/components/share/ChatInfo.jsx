@@ -8,16 +8,16 @@ const ChatInfo = ({ data }) => {
     const navigate = useNavigate();
 
     return (
-        <div className="w-full flex items-center justify-start h-[50px] mt-2 shadow" onClick={() => {
+        <div className="w-full flex items-center justify-start h-[50px] mt-2 shadow" >
+            <div className="min-h-[30px] min-w-[30px] m-2 rounded-full bg-zinc-400 flex justify-center items-center">
+                <div>{data.name[0]}</div>
+            </div>
+            <div className="flex w-[100%] flex-col" onClick={() => {
             setChatId(data._id);
             if (data._id) {
                 navigate(`chat/${data._id}`);
             }
         }}>
-            <div className="min-h-[30px] min-w-[30px] m-2 rounded-full bg-zinc-400 flex justify-center items-center">
-                <div>{data.name[0]}</div>
-            </div>
-            <div className="flex w-[100%] flex-col">
                 <div className="font-semibold text-[15px]">{data.name}</div>
                 <div className="flex w-full items-center justify-start">
                     <div className="time text-black-400 text-[12px] font-bold">2 min ago</div>

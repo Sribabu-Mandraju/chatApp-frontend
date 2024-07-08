@@ -6,8 +6,8 @@ import { useSelector } from 'react-redux';
 const useFetchMessages = (id) => {
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState([]);
-  const {chatDetails,setChatDetails} = useState({})
     const user = useSelector((state)=>state.auth.user)
+    const [chat,setChat] = useState({})
   
 
   useEffect(() => {
@@ -18,9 +18,6 @@ const useFetchMessages = (id) => {
 
       try {
         const res = await axios.get(`http://localhost:3000/msg/getMessages/${user._id}/${id}`);
-        console.log(id)
-        const res2 = await axios.get(`http://localhost:3000/user/${id}`)
-        setChatDetails(res2.data)
         setMessages(res.data);
       } catch (error) {
         console.log(error.message);
@@ -30,9 +27,9 @@ const useFetchMessages = (id) => {
     };
 
     fetchMessages();
-  }, [user]);
+  }, [user,id]);
 
-  return { loading, messages,chatDetails, user };
+  return { loading,messages, user };
 };
 
 export default useFetchMessages;
