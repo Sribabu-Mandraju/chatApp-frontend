@@ -21,6 +21,10 @@ const Chat = () => {
   const {loading,messages,user} = useFetchMessages(id)
   const [chatDetails,setChatDetails] = useState({})
   const [fetchLoading,setFetchLoading] = useState(false)
+  const [send,setSend] = useState(false)
+  const [chatMessage,setChatMessage] = useState({
+    sendData:""
+  })
 
   console.log(messages)
 
@@ -46,6 +50,29 @@ const Chat = () => {
     }
     fetchData()
   },[id])
+
+  const handleChatMessage = (e) => {
+    const messageData = {...chatMessage}
+    messageData[e.target.name] = e.target.value;
+    setChatMessage(messageData)
+  }
+  const handleSend =async (e) => {
+    
+    console.log(chatMessage)
+    try {
+      setSend(true)
+      const sendChat  = await axios.post(`http://localhost:3000/msg/sendMessage/${id}/${userData._id}`,{message:chatMessage.sendData})
+      if(sendChat.ok){
+        setChatMessage("")
+        setSend(false)
+        
+      }
+    } catch (error) {
+      console.log(error)
+      setSend(false)
+    }
+    window.location.reload()
+  }
   console.log(chatDetails)
   if(loading || fetchLoading){
     return (
@@ -86,8 +113,8 @@ const Chat = () => {
         </div>
         <div className="w-full flex items-center mt-1">
           <FaRegSmile className="text-2xl ms-2" />
-          <input type="text" className="bg-zinc-200 w-70 max-w-[520px] outline-none ps-2 rounded-lg h-[50px] border-[4px]  ms-2 " placeholder='message....' />
-          <button className="w-[60px] h-[50px] flex justify-start items-center rounded-r-[50%] bg-black text-white">
+          <input type="text" className="bg-zinc-200 w-70 max-w-[520px] outline-none ps-2 rounded-lg h-[50px] border-[4px]  ms-2 " name="sendData" onChange={handleChatMessage} placeholder='message....' />
+          <button className="w-[60px] h-[50px] flex justify-start items-center rounded-r-[50%] bg-black text-white"  type="submit" onClick={() => handleSend()}>
             <LuSend className="text-2xl ms-3" />
           </button>
         </div>
