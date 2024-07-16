@@ -31,10 +31,12 @@ const  App = () => {
                   <Route element={<Profile />} path="/profile" />
                   <Route element={<Search />} path="/search" />
                   <Route element={<UnreadMessages />} path="/unread-messages" />
+                  <Route element={<Register/>} path="/register  "/>
                   <Route element={<Chat />} path="/chat/:id" />
               </Route>
               <Route element={<Login/>} path="/login"/>
-              <Route element={<Register/>} path="/  "/>
+              <Route element={<Register/>} path="/signup"/>
+              <Route element={<Register/>} path="/register  "/>
               <Route path="*" element={<NotFound />} /> 
         </Routes>
       </Home>

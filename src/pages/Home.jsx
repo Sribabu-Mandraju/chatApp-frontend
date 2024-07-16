@@ -27,7 +27,7 @@ const Home = ({children}) => {
   return (
     <>
       <section className={`w-full  relative max-h-screen min-h-screen sm:hidden `}>
-          <div className={`bg-white w-full h-[40px]  items-center justify-around sticky top-0 shadow ${getPage[getPage.length-2] == "chat" ? "hidden":"flex"} `}>
+          <div className={`bg-white w-full h-[40px]  items-center justify-around fixed bottom-0 shadow ${getPage[getPage.length-2] == "chat" ? "hidden":"flex"} `}>
               <div className={`flex flex-col justify-center items-center rounded-md  px-2 ${getExactPage==""?" text-[#7a0099] font-bold":""}  p-1`} onClick={()=>{
                 setTab("Home")
                 navigate("/")

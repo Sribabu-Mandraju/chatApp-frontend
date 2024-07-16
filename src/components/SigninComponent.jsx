@@ -99,7 +99,7 @@ const SigninComponent = () => {
                 </button>
                 <p className="text-center">
                     <span className="text-[grey]">Don't have an account? </span>
-                    <Link to="/register" className="hover:underline">Register</Link>
+                    <Link to="/signup" className="hover:underline">Register</Link>
                 </p>
                 <div className="flex w-full items-center justify-between h-[50px]">
                     <div className="w-[35%] h-[1px] bg-[grey] mx-auto"></div>
